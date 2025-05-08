@@ -4,3 +4,11 @@ class UserCreate(BaseModel):
     email:str
     password:str
     role: str
+    
+class ShowUser(BaseModel):
+    username:str
+    email:str
+    role:str
+    
+    class Config():
+        from_attributes = True
