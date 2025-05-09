@@ -5,19 +5,14 @@ from sqlalchemy.orm import Session
 from app.models.user import User
 from app.auth.hashing import hash_password
 from fastapi import Depends
+from app.services.user import createUser
 
-router = APIRouter()
+router = APIRouter(prefix="/user", tags=["User"])
 
 
-@router.post("/user", response_model=ShowUser, tags=["user"])
+@router.post(
+    "/",
+    response_model=ShowUser,
+)
 def create_user(request: UserCreate, db: Session = Depends(get_db)):
-    new_user = User(
-        username=request.username,
-        email=request.email,
-        password=hash_password(request.password),
-        role=request.role,
-    )
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    return new_user
+    return createUser(request, db)
